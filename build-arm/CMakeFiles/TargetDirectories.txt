@@ -1,0 +1,4 @@
+/home/alex/imx6ull/build-arm/CMakeFiles/rebuild_cache.dir
+/home/alex/imx6ull/build-arm/CMakeFiles/edit_cache.dir
+/home/alex/imx6ull/build-arm/CMakeFiles/QtImx6ullBackend.dir
+/home/alex/imx6ull/build-arm/CMakeFiles/QtImx6ullBackend_automoc.dir
