@@ -15,11 +15,20 @@
 
 ```bash
 .  
-├── build-arm   # 编译好的文件  
-├── docs        # 文档与材料  
-├── inc         # 头文件  
-├── src         # 源文件代码  
-└── unittest    # 单元测试与测试程序
+├── build-arm/   # 编译好的文件  
+├── docs/        # 文档与材料  
+├── inc/         # 头文件  
+├── src/         # 源文件代码  
+│   ├── managers/              # 管理类
+│   ├── services/              # 服务类
+│   ├── devices/               # 设备类
+│   ├── common/                # 公共组件
+│   └── Plugin/                # 插件
+│      ├──  /               # 插件接口
+│      ├── LED /               # LED GPIO接口
+│      ├── Serial /            # 串口接口
+│      └── CAN/                # Can 通讯接口
+└── unittest/    # 单元测试与测试程序
 ```
 ## 使用
 

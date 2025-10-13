@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "plugin_led.h": "c",
+        "string.h": "c"
+    }
+}
