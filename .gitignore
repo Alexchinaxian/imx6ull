@@ -11,6 +11,7 @@ Makefile
 *.cmake
 !CMakeLists.txt
 !cmake/*.cmake
+!third_party/**/*.cmake
 
 # 编译产物
 *.o
