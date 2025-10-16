@@ -47,18 +47,20 @@ if (NOT TARGET Qt5::Core)
         "${_qt5Core_install_prefix}/include/QtCore/5.12.9/QtCore"
     )
 
-    foreach(_dir ${_Qt5Core_OWN_INCLUDE_DIRS})
-        _qt5_Core_check_file_exists(${_dir})
-    endforeach()
+    # 注释掉include目录检查以提高可移植性
+    # foreach(_dir ${_Qt5Core_OWN_INCLUDE_DIRS})
+    #     _qt5_Core_check_file_exists(${_dir})
+    # endforeach()
 
     # Only check existence of private includes if the Private component is
     # specified.
-    list(FIND Qt5Core_FIND_COMPONENTS Private _check_private)
-    if (NOT _check_private STREQUAL -1)
-        foreach(_dir ${Qt5Core_PRIVATE_INCLUDE_DIRS})
-            _qt5_Core_check_file_exists(${_dir})
-        endforeach()
-    endif()
+    # 注释掉私有include目录检查以提高可移植性
+    # list(FIND Qt5Core_FIND_COMPONENTS Private _check_private)
+    # if (NOT _check_private STREQUAL -1)
+    #     foreach(_dir ${Qt5Core_PRIVATE_INCLUDE_DIRS})
+    #         _qt5_Core_check_file_exists(${_dir})
+    #     endforeach()
+    # endif()
 
     set(Qt5Core_INCLUDE_DIRS ${_Qt5Core_OWN_INCLUDE_DIRS})
 

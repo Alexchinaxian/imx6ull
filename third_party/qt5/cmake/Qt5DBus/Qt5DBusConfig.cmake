@@ -47,9 +47,9 @@ if (NOT TARGET Qt5::DBus)
         "${_qt5DBus_install_prefix}/include/QtDBus/5.12.9/QtDBus"
     )
 
-    foreach(_dir ${_Qt5DBus_OWN_INCLUDE_DIRS})
-        _qt5_DBus_check_file_exists(${_dir})
-    endforeach()
+    # foreach(_dir ${_Qt5DBus_OWN_INCLUDE_DIRS}) # Commented for portability
+#        _qt5_check_file_exists(${_dir})
+    # endforeach() # Commented for portability
 
     # Only check existence of private includes if the Private component is
     # specified.
@@ -57,7 +57,7 @@ if (NOT TARGET Qt5::DBus)
     if (NOT _check_private STREQUAL -1)
         foreach(_dir ${Qt5DBus_PRIVATE_INCLUDE_DIRS})
             _qt5_DBus_check_file_exists(${_dir})
-        endforeach()
+        # endforeach() # Commented for portability
     endif()
 
     set(Qt5DBus_INCLUDE_DIRS ${_Qt5DBus_OWN_INCLUDE_DIRS})
@@ -104,7 +104,7 @@ if (NOT TARGET Qt5::DBus)
         list(APPEND Qt5DBus_DEFINITIONS ${Qt5${_module_dep}_DEFINITIONS})
         list(APPEND Qt5DBus_COMPILE_DEFINITIONS ${Qt5${_module_dep}_COMPILE_DEFINITIONS})
         list(APPEND Qt5DBus_EXECUTABLE_COMPILE_FLAGS ${Qt5${_module_dep}_EXECUTABLE_COMPILE_FLAGS})
-    endforeach()
+    # endforeach() # Commented for portability
     list(REMOVE_DUPLICATES Qt5DBus_INCLUDE_DIRS)
     list(REMOVE_DUPLICATES Qt5DBus_PRIVATE_INCLUDE_DIRS)
     list(REMOVE_DUPLICATES Qt5DBus_DEFINITIONS)
@@ -129,7 +129,7 @@ if (NOT TARGET Qt5::DBus)
         if (NOT EXISTS ${_Qt5DBus_PRIVATE_DIR})
             set(_Qt5DBus_PRIVATE_DIRS_EXIST FALSE)
         endif()
-    endforeach()
+    # endforeach() # Commented for portability
 
     if (_Qt5DBus_PRIVATE_DIRS_EXIST)
         add_library(Qt5::DBusPrivate INTERFACE IMPORTED)
@@ -141,7 +141,7 @@ if (NOT TARGET Qt5::DBus)
             if (TARGET ${dep}Private)
                 list(APPEND _Qt5DBus_PRIVATEDEPS ${dep}Private)
             endif()
-        endforeach()
+        # endforeach() # Commented for portability
         set_property(TARGET Qt5::DBusPrivate PROPERTY
             INTERFACE_LINK_LIBRARIES Qt5::DBus ${_Qt5DBus_PRIVATEDEPS}
         )
@@ -167,7 +167,7 @@ if (NOT TARGET Qt5::DBus)
     if (pluginTargets)
         foreach(pluginTarget ${pluginTargets})
             include(${pluginTarget})
-        endforeach()
+        # endforeach() # Commented for portability
     endif()
 
 

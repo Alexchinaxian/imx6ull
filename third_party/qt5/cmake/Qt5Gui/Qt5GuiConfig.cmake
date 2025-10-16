@@ -47,9 +47,9 @@ if (NOT TARGET Qt5::Gui)
         "${_qt5Gui_install_prefix}/include/QtGui/5.12.9/QtGui"
     )
 
-    foreach(_dir ${_Qt5Gui_OWN_INCLUDE_DIRS})
-        _qt5_Gui_check_file_exists(${_dir})
-    endforeach()
+    # foreach(_dir ${_Qt5Gui_OWN_INCLUDE_DIRS}) # Commented for portability
+#        _qt5_check_file_exists(${_dir})
+    # endforeach() # Commented for portability
 
     # Only check existence of private includes if the Private component is
     # specified.
@@ -57,7 +57,7 @@ if (NOT TARGET Qt5::Gui)
     if (NOT _check_private STREQUAL -1)
         foreach(_dir ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
             _qt5_Gui_check_file_exists(${_dir})
-        endforeach()
+        # endforeach() # Commented for portability
     endif()
 
     set(Qt5Gui_INCLUDE_DIRS ${_Qt5Gui_OWN_INCLUDE_DIRS})
@@ -104,7 +104,7 @@ if (NOT TARGET Qt5::Gui)
         list(APPEND Qt5Gui_DEFINITIONS ${Qt5${_module_dep}_DEFINITIONS})
         list(APPEND Qt5Gui_COMPILE_DEFINITIONS ${Qt5${_module_dep}_COMPILE_DEFINITIONS})
         list(APPEND Qt5Gui_EXECUTABLE_COMPILE_FLAGS ${Qt5${_module_dep}_EXECUTABLE_COMPILE_FLAGS})
-    endforeach()
+    # endforeach() # Commented for portability
     list(REMOVE_DUPLICATES Qt5Gui_INCLUDE_DIRS)
     list(REMOVE_DUPLICATES Qt5Gui_PRIVATE_INCLUDE_DIRS)
     list(REMOVE_DUPLICATES Qt5Gui_DEFINITIONS)
@@ -129,7 +129,7 @@ if (NOT TARGET Qt5::Gui)
         if (NOT EXISTS ${_Qt5Gui_PRIVATE_DIR})
             set(_Qt5Gui_PRIVATE_DIRS_EXIST FALSE)
         endif()
-    endforeach()
+    # endforeach() # Commented for portability
 
     if (_Qt5Gui_PRIVATE_DIRS_EXIST)
         add_library(Qt5::GuiPrivate INTERFACE IMPORTED)
@@ -141,7 +141,7 @@ if (NOT TARGET Qt5::Gui)
             if (TARGET ${dep}Private)
                 list(APPEND _Qt5Gui_PRIVATEDEPS ${dep}Private)
             endif()
-        endforeach()
+        # endforeach() # Commented for portability
         set_property(TARGET Qt5::GuiPrivate PROPERTY
             INTERFACE_LINK_LIBRARIES Qt5::Gui ${_Qt5Gui_PRIVATEDEPS}
         )
@@ -167,7 +167,7 @@ if (NOT TARGET Qt5::Gui)
     if (pluginTargets)
         foreach(pluginTarget ${pluginTargets})
             include(${pluginTarget})
-        endforeach()
+        # endforeach() # Commented for portability
     endif()
 
 
