@@ -5,7 +5,8 @@
 export TOOLCHAIN_BASE="/opt/fsl-imx-x11/4.1.15-2.1.0/sysroots/x86_64-pokysdk-linux/usr/bin/arm-poky-linux-gnueabi"
 export TOOLCHAIN_PATH="/opt/fsl-imx-x11/4.1.15-2.1.0/sysroots/x86_64-pokysdk-linux/usr/bin"
 export SYSROOT_PATH="/opt/fsl-imx-x11/4.1.15-2.1.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi"
-export QT_ARM_PATH="/home/alex/qt-everywhere-src-5.12.9/arm-qt"
+# 使用项目内的Qt库（便于项目移植）
+export QT_ARM_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/third_party/qt5"
 
 # 将工具链添加到 PATH
 export PATH="$TOOLCHAIN_BASE:$TOOLCHAIN_PATH:$PATH"

@@ -19,13 +19,13 @@ set(CMAKE_CXX_COMPILER /opt/fsl-imx-x11/4.1.15-2.1.0/sysroots/x86_64-pokysdk-lin
 # Sysroot 设置
 set(CMAKE_SYSROOT /opt/fsl-imx-x11/4.1.15-2.1.0/sysroots/cortexa7hf-neon-poky-linux-gnueabi)
 
-# Qt 路径设置
-set(QT_ARM_PATH "/home/alex/qt-everywhere-src-5.12.9/arm-qt")
-set(CMAKE_PREFIX_PATH "${QT_ARM_PATH}/lib/cmake")
+# Qt 路径设置 - 使用项目内的Qt库
+set(QT_ARM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/qt5")
+set(CMAKE_PREFIX_PATH "${QT_ARM_PATH}/cmake")
 
 # 编译标志
-set(CMAKE_C_FLAGS "--sysroot=${CMAKE_SYSROOT} -march=armv7-a -mfpu=neon -mfloat-abi=hard -mcpu=cortex-a7")
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -fPIC")  # 添加 -fPIC 用于动态库
+set(CMAKE_C_FLAGS "--sysroot=${CMAKE_SYSROOT} -mcpu=cortex-a7 -mfpu=neon -mfloat-abi=hard")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
 # 设置库文件输出目录
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
@@ -38,84 +38,110 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui SerialBus Network SerialPort)
 set(CMAKE_AUTOMOC ON)
 
 # ===========================================
-# 1. 创建 Plugin 动态库
+# 源文件定义
 # ===========================================
-set(PLUGIN_SOURCES
-    src/Plugin/gpio_imx6ull.c
-    # 可以添加更多 Plugin 源文件
-)
 
-set(PLUGIN_HEADERS
-    inc/Plugin/gpio_imx6ull.h
-    # 可以添加更多 Plugin 头文件
-)
-
-# 创建共享库
-add_library(Imx6ullBoardPlugin SHARED
-    ${PLUGIN_SOURCES}
-    ${PLUGIN_HEADERS}
-)
-
-# 设置动态库版本
-set_target_properties(Imx6ullBoardPlugin PROPERTIES
-    VERSION 1.0.0
-    SOVERSION 1
-    OUTPUT_NAME "Imx6ullBoardPlugin"
-)
-
-# Plugin 包含目录
-target_include_directories(Imx6ullBoardPlugin PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc/Plugin
-)
-
-# Plugin 编译选项
-target_compile_options(Imx6ullBoardPlugin PRIVATE
-    -fPIC
-    -Wall
-)
-
-# Plugin 链接选项
-target_link_libraries(Imx6ullBoardPlugin)
-# 如果需要链接其他库，可以在这里添加
-
-# ===========================================
-# 2. 主程序可执行文件
-# ===========================================
+# 主程序
 set(MAIN_SOURCES
     src/main.cpp
 )
 
-# 其他层的源文件（如果需要）
-set(CONNECTION_SOURCES
-    #src/connection/led_controller.cpp
+# 核心层
+set(CORE_SOURCES
+    src/core/ServiceManager.cpp
+    src/core/HardwareConfig.cpp
+    src/core/HardwareMapper.cpp
+    src/core/SystemBeep.cpp
+    src/core/LogManager.cpp
 )
 
-set(CONNECTION_HEADERS
-    #inc/connection/led_controller.h
+set(CORE_HEADERS
+    include/core/ServiceManager.h
+    include/core/ISysSvrInterface.h
+    include/core/HardwareConfig.h
+    include/core/HardwareMapper.h
+    include/core/SystemBeep.h
+    include/core/LogManager.h
 )
 
-set(BUSINESS_SOURCES
-    #src/business/led_manager.cpp
+# 驱动层
+set(DRIVER_SOURCES
+    src/drivers/temperature/DriverTemperature.cpp
+    src/drivers/gpio/DriverGPIO.cpp
+    src/drivers/led/DriverLED.cpp
+    src/drivers/beep/DriverBeep.cpp
+    src/drivers/pwm/DriverPWM.cpp
+    src/drivers/serial/DriverSerial.cpp
+    src/drivers/can/DriverCAN.cpp
+    src/drivers/can/DriverCANHighPerf.cpp
+    src/drivers/manager/DriverManager.cpp
+    src/drivers/scanner/SystemScanner.cpp
 )
 
-set(BUSINESS_HEADERS
-    #inc/business/led_manager.h
+set(DRIVER_HEADERS
+    include/drivers/temperature/DriverTemperature.h
+    include/drivers/gpio/DriverGPIO.h
+    include/drivers/led/DriverLED.h
+    include/drivers/beep/DriverBeep.h
+    include/drivers/pwm/DriverPWM.h
+    include/drivers/serial/DriverSerial.h
+    include/drivers/can/DriverCAN.h
+    include/drivers/can/DriverCANHighPerf.h
+    include/drivers/manager/DriverManager.h
+    include/drivers/scanner/SystemScanner.h
 )
 
-# 添加可执行文件
+# 服务层
+set(SERVICE_SOURCES
+    src/services/temperature/TemperatureService.cpp
+    src/services/modbus/ModbusSlaveService.cpp
+    src/services/time/TimeService.cpp
+    src/services/weather/WeatherService.cpp
+    src/services/alarm/AlarmService.cpp
+)
+
+set(SERVICE_HEADERS
+    include/services/temperature/TemperatureService.h
+    include/services/modbus/ModbusSlaveService.h
+    include/services/time/TimeService.h
+    include/services/weather/WeatherService.h
+    include/services/alarm/AlarmService.h
+)
+
+# 协议层
+set(PROTOCOL_SOURCES
+    src/protocols/modbus/ModbusRTU.cpp
+    src/protocols/modbus/ModbusTCP.cpp
+    src/protocols/modbus/ModbusSlave.cpp
+    src/protocols/manager/ProtocolManager.cpp
+)
+
+set(PROTOCOL_HEADERS
+    include/protocols/IProtocolInterface.h
+    include/protocols/modbus/ModbusRTU.h
+    include/protocols/modbus/ModbusTCP.h
+    include/protocols/modbus/ModbusSlave.h
+    include/protocols/manager/ProtocolManager.h
+)
+
+# ===========================================
+# 创建可执行文件
+# ===========================================
 add_executable(QtImx6ullBackend
     ${MAIN_SOURCES}
-    ${CONNECTION_SOURCES}
-    ${CONNECTION_HEADERS}
-    ${BUSINESS_SOURCES}
-    ${BUSINESS_HEADERS}
+    ${CORE_SOURCES}
+    ${CORE_HEADERS}
+    ${DRIVER_SOURCES}
+    ${DRIVER_HEADERS}
+    ${SERVICE_SOURCES}
+    ${SERVICE_HEADERS}
+    ${PROTOCOL_SOURCES}
+    ${PROTOCOL_HEADERS}
 )
 
-# 主程序包含目录
+# 包含目录
 target_include_directories(QtImx6ullBackend PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc/driver
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${QT_ARM_PATH}/include
     ${QT_ARM_PATH}/include/Qt
     ${QT_ARM_PATH}/include/QtCore
@@ -125,9 +151,8 @@ target_include_directories(QtImx6ullBackend PRIVATE
     ${QT_ARM_PATH}/include/QtSerialPort
 )
 
-# 链接库：先链接 Plugin 库，再链接 Qt 库
+# 链接Qt库
 target_link_libraries(QtImx6ullBackend 
-    Imx6ullBoardPlugin  # 链接我们创建的 Plugin 库
     Qt5::Core 
     Qt5::Gui 
     Qt5::SerialBus
@@ -136,52 +161,45 @@ target_link_libraries(QtImx6ullBackend
 )
 
 # 设置链接标志
+# RPATH设置为相对路径，使可执行文件能找到项目内的Qt库
 set_target_properties(QtImx6ullBackend PROPERTIES
-    LINK_FLAGS "--sysroot=${CMAKE_SYSROOT} -Wl,-rpath-link,${QT_ARM_PATH}/lib -Wl,-rpath,\\\$ORIGIN/../lib"
+    LINK_FLAGS "--sysroot=${CMAKE_SYSROOT} -Wl,-rpath-link,${QT_ARM_PATH}/lib -Wl,-rpath,\\\$ORIGIN/../../third_party/qt5/lib:\\\$ORIGIN"
 )
 
 # ===========================================
-# 3. 源文件分组显示
+# 源文件分组（IDE显示用）
 # ===========================================
-source_group("Plugin Library" FILES ${PLUGIN_SOURCES} ${PLUGIN_HEADERS})
-source_group("Connection Layer" FILES ${CONNECTION_SOURCES} ${CONNECTION_HEADERS})
-source_group("Business Layer" FILES ${BUSINESS_SOURCES} ${BUSINESS_HEADERS})
 source_group("Main" FILES ${MAIN_SOURCES})
+source_group("Core" FILES ${CORE_SOURCES} ${CORE_HEADERS})
+source_group("Drivers" FILES ${DRIVER_SOURCES} ${DRIVER_HEADERS})
+source_group("Services" FILES ${SERVICE_SOURCES} ${SERVICE_HEADERS})
+source_group("Protocols" FILES ${PROTOCOL_SOURCES} ${PROTOCOL_HEADERS})
 
 # ===========================================
-# 4. 安装规则（可选）
+# 安装规则
 # ===========================================
-# 安装动态库
-install(TARGETS Imx6ullBoardPlugin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-)
-
-# 安装可执行文件
 install(TARGETS QtImx6ullBackend
     RUNTIME DESTINATION bin
 )
 
-# 安装头文件（如果需要）
-install(DIRECTORY inc/Plugin/
-    DESTINATION include/Plugin
-    FILES_MATCHING PATTERN "*.h"
-)
-
 # ===========================================
-# 5. 调试信息
+# 调试信息
 # ===========================================
 message(STATUS "==========================================")
-message(STATUS "项目配置信息")
+message(STATUS "IMX6ULL Qt Backend Project")
 message(STATUS "==========================================")
 message(STATUS "项目名称: ${PROJECT_NAME}")
 message(STATUS "目标文件: QtImx6ullBackend")
-message(STATUS "动态库: Imx6ullBoardPlugin")
 message(STATUS "Qt 版本: ${Qt5_VERSION}")
 message(STATUS "Qt 路径: ${QT_ARM_PATH}")
 message(STATUS "系统根目录: ${CMAKE_SYSROOT}")
 message(STATUS "C++ 编译器: ${CMAKE_CXX_COMPILER}")
 message(STATUS "C 编译器: ${CMAKE_C_COMPILER}")
-message(STATUS "库输出目录: ${LIBRARY_OUTPUT_PATH}")
-message(STATUS "可执行文件输出目录: ${EXECUTABLE_OUTPUT_PATH}")
+message(STATUS "可执行文件输出: ${EXECUTABLE_OUTPUT_PATH}")
+message(STATUS "")
+message(STATUS "项目架构:")
+message(STATUS "  - Core Layer: ${CMAKE_CURRENT_SOURCE_DIR}/include/core")
+message(STATUS "  - Driver Layer: ${CMAKE_CURRENT_SOURCE_DIR}/include/drivers")
+message(STATUS "  - Service Layer: ${CMAKE_CURRENT_SOURCE_DIR}/include/services")
+message(STATUS "  - Protocol Layer: ${CMAKE_CURRENT_SOURCE_DIR}/include/protocols")
 message(STATUS "==========================================")

@@ -1,3 +1,0 @@
-#include <QDebug>
-#include <cmath>
-

@@ -1,0 +1,254 @@
+# =========================================================
+# 硬件配置文件 (Hardware Configuration File)
+# =========================================================
+# 说明：
+#   本配置文件用于定义系统中所有硬件设备的配置和别名
+#   支持的硬件类型：GPIO、LED、PWM、Serial、CAN、I2C、SPI
+#
+# 配置格式：
+#   [设备类型/设备别名]
+#   type = 设备类型（GPIO/LED/PWM/Serial等）
+#   name = 设备别名（用于应用层引用）
+#   chip = 芯片编号
+#   channel = 通道编号
+#   device = 设备路径
+#   enabled = 是否启用（true/false）
+#   description = 设备描述
+#
+# =========================================================
+
+# ---------------------------------------------------------
+# PWM设备配置
+# ---------------------------------------------------------
+
+[PWM/风扇]
+type = PWM
+name = 风扇
+chip = 0
+channel = 0
+enabled = true
+frequency = 25000
+duty_cycle = 50.0
+description = 散热风扇控制
+
+[PWM/背光]
+type = PWM
+name = 背光
+chip = 1
+channel = 0
+enabled = true
+frequency = 1000
+duty_cycle = 80.0
+description = LCD背光亮度控制
+
+[PWM/电机1]
+type = PWM
+name = 电机1
+chip = 2
+channel = 0
+enabled = true
+frequency = 20000
+duty_cycle = 0.0
+description = 主电机速度控制
+
+[PWM/电机2]
+type = PWM
+name = 电机2
+chip = 2
+channel = 1
+enabled = false
+frequency = 20000
+duty_cycle = 0.0
+description = 副电机速度控制
+
+# ---------------------------------------------------------
+# GPIO设备配置
+# ---------------------------------------------------------
+
+[GPIO/继电器1]
+type = GPIO
+name = 继电器1
+gpio_num = 3
+direction = out
+initial_value = 0
+enabled = true
+description = 主控继电器
+
+[GPIO/继电器2]
+type = GPIO
+name = 继电器2
+gpio_num = 4
+direction = out
+initial_value = 0
+enabled = true
+description = 备用继电器
+
+[GPIO/按键1]
+type = GPIO
+name = 按键1
+gpio_num = 5
+direction = in
+edge = both
+enabled = true
+description = 用户按键1
+
+[GPIO/按键2]
+type = GPIO
+name = 按键2
+gpio_num = 6
+direction = in
+edge = both
+enabled = true
+description = 用户按键2
+
+# ---------------------------------------------------------
+# LED设备配置
+# ---------------------------------------------------------
+
+[LED/系统指示灯]
+type = LED
+name = 系统指示灯
+device = sys-led
+enabled = true
+brightness = 255
+description = 系统运行状态指示
+
+[LED/心跳灯]
+type = LED
+name = 心跳灯
+device = heartbeat
+enabled = true
+brightness = 128
+trigger = heartbeat
+description = 心跳指示灯
+
+[LED/报警灯]
+type = LED
+name = 报警灯
+device = red-led
+enabled = true
+brightness = 0
+description = 故障报警指示
+
+[LED/网络灯]
+type = LED
+name = 网络灯
+device = green-led
+enabled = true
+brightness = 255
+description = 网络连接状态
+
+# ---------------------------------------------------------
+# 串口设备配置
+# ---------------------------------------------------------
+
+[Serial/调试串口]
+type = Serial
+name = 调试串口
+device = /dev/ttyS0
+baudrate = 115200
+databits = 8
+parity = N
+stopbits = 1
+enabled = true
+description = 调试和日志输出
+
+[Serial/Modbus串口]
+type = Serial
+name = Modbus串口
+device = /dev/ttymxc2
+baudrate = 9600
+databits = 8
+parity = N
+stopbits = 1
+enabled = true
+description = Modbus RTU通信
+
+[Serial/外设串口]
+type = Serial
+name = 外设串口
+device = /dev/ttyS1
+baudrate = 115200
+databits = 8
+parity = N
+stopbits = 1
+enabled = false
+description = 外设扩展串口
+
+# ---------------------------------------------------------
+# CAN设备配置
+# ---------------------------------------------------------
+
+[CAN/CAN0]
+type = CAN
+name = CAN0
+device = can0
+bitrate = 500000
+enabled = false
+description = CAN总线0
+
+[CAN/CAN1]
+type = CAN
+name = CAN1
+device = can1
+bitrate = 250000
+enabled = false
+description = CAN总线1
+
+# ---------------------------------------------------------
+# I2C设备配置
+# ---------------------------------------------------------
+
+[I2C/温湿度传感器]
+type = I2C
+name = 温湿度传感器
+bus = 0
+address = 0x40
+enabled = false
+description = SHT30温湿度传感器
+
+[I2C/RTC时钟]
+type = I2C
+name = RTC时钟
+bus = 0
+address = 0x68
+enabled = false
+description = DS1307实时时钟
+
+# ---------------------------------------------------------
+# SPI设备配置
+# ---------------------------------------------------------
+
+[SPI/显示屏]
+type = SPI
+name = 显示屏
+bus = 0
+cs = 0
+speed = 10000000
+enabled = false
+description = SPI液晶显示屏
+
+# ---------------------------------------------------------
+# 蜂鸣器配置
+# ---------------------------------------------------------
+
+[Beep/系统蜂鸣器]
+type = Beep
+name = 系统蜂鸣器
+device = beep
+enabled = true
+description = 系统提示音（初始化完成时响2次）
+
+# ---------------------------------------------------------
+# 温度传感器配置
+# ---------------------------------------------------------
+
+[Temperature/CPU温度]
+type = Temperature
+name = CPU温度
+device = /sys/class/thermal/thermal_zone0/temp
+enabled = true
+poll_interval = 1000
+high_threshold = 85.0
+description = CPU核心温度监控
+

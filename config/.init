@@ -1,9 +1,0 @@
-[Ports]
-port1/type=CONFIG_PORT_TYPE_CAN
-port1/libname=can_driver
-port1/settings=500k
-
-[Devices]
-device1/type=CONFIG_DEV_TYPE_PCU
-device1/libname=pcu_plugin
-device1/devId=1001
