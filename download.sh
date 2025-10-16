@@ -15,7 +15,9 @@ TARGET_DIR="~"  # home目录（程序和库都部署到这里）
 PROGRAM_NAME="QtImx6ullBackend"
 LIB_NAME="HardwarePlugin"  # 统一的硬件插件库
 
-BUILD_DIR="/home/alex/imx6ull/build"
+# 获取脚本所在目录的绝对路径
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR="$SCRIPT_DIR/build-arm"
 BUILD_FILE="$BUILD_DIR/bin/$PROGRAM_NAME"
 BUILD_LIB_DIR="$BUILD_DIR/lib"
 
@@ -314,4 +316,3 @@ else
     echo -e "  ${GREEN}ssh $TARGET_USER@$TARGET_IP 'cd ~ && export LD_LIBRARY_PATH=.:\$LD_LIBRARY_PATH && nohup ./$PROGRAM_NAME > /tmp/${PROGRAM_NAME}.log 2>&1 &'${NC}"
 fi
 
-echo ""

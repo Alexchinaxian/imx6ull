@@ -46,6 +46,10 @@ set(MAIN_SOURCES
     src/main.cpp
 )
 
+set(MAIN_HEADERS
+    include/main.h
+)
+
 # 核心层
 set(CORE_SOURCES
     src/core/ServiceManager.cpp
@@ -129,6 +133,7 @@ set(PROTOCOL_HEADERS
 # ===========================================
 add_executable(QtImx6ullBackend
     ${MAIN_SOURCES}
+    ${MAIN_HEADERS}
     ${CORE_SOURCES}
     ${CORE_HEADERS}
     ${DRIVER_SOURCES}
@@ -169,7 +174,7 @@ set_target_properties(QtImx6ullBackend PROPERTIES
 # ===========================================
 # 源文件分组（IDE显示用）
 # ===========================================
-source_group("Main" FILES ${MAIN_SOURCES})
+source_group("Main" FILES ${MAIN_SOURCES} ${MAIN_HEADERS})
 source_group("Core" FILES ${CORE_SOURCES} ${CORE_HEADERS})
 source_group("Drivers" FILES ${DRIVER_SOURCES} ${DRIVER_HEADERS})
 source_group("Services" FILES ${SERVICE_SOURCES} ${SERVICE_HEADERS})

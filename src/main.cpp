@@ -39,17 +39,23 @@
 #include "core/SystemBeep.h"
 
 // ==========================================
-// 全局常量和变量
+// 全局变量声明
+// ==========================================
+
+#include "main.h"  // 全局变量和常量声明
+
+// ==========================================
+// 全局常量和变量定义
 // ==========================================
 
 // 软件版本号（主版本.次版本.修订版本）
-const uint8_t SoftwareVersion[3] = {1, 2, 0};       // V1.2.0
+const uint8_t SoftwareVersion[3] = {1, 0, 2};       // V1.0.2
 
-// 全局服务管理器指针（用于信号处理器访问）
-static ServiceManager *g_serviceManager = nullptr;
+// 全局服务管理器实例
+ServiceManager *g_serviceManager = nullptr;
 
-// 全局系统蜂鸣器指针（用于信号处理器访问）
-static SystemBeep *g_systemBeep = nullptr;
+// 全局系统蜂鸣器实例
+SystemBeep *g_systemBeep = nullptr;
 
 // ==========================================
 // 信号处理机制
