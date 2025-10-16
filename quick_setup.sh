@@ -86,21 +86,49 @@ echo ""
 echo -e "${BLUE}[3/5] 检查项目Qt库...${NC}"
 QT_LIB_DIR="$PROJECT_ROOT/third_party/qt5/lib"
 
-if [ ! -d "$QT_LIB_DIR" ]; then
-    echo -e "${YELLOW}Qt库目录不存在，尝试复制...${NC}"
-    
-    if [ -f "$PROJECT_ROOT/copy_qt_libs.sh" ]; then
-        if [ -d "/home/alex/qt-everywhere-src-5.12.9/arm-qt" ]; then
-            bash "$PROJECT_ROOT/copy_qt_libs.sh"
-        else
-            echo -e "${YELLOW}未找到Qt源路径${NC}"
-            echo "请确保Qt库已复制到 third_party/qt5/ 目录"
-            echo "或者运行: ./copy_qt_libs.sh"
-        fi
+# 检查必需的Qt库文件
+REQUIRED_QT_LIBS=(
+    "libQt5Core.so.5.12.9"
+    "libQt5Gui.so.5.12.9"
+    "libQt5Network.so.5.12.9"
+    "libQt5SerialBus.so.5.12.9"
+    "libQt5SerialPort.so.5.12.9"
+)
+
+MISSING_LIBS=()
+for lib in "${REQUIRED_QT_LIBS[@]}"; do
+    if [ ! -f "$QT_LIB_DIR/$lib" ]; then
+        MISSING_LIBS+=("$lib")
+    fi
+done
+
+if [ ${#MISSING_LIBS[@]} -ne 0 ]; then
+    echo -e "${RED}✗ Qt库文件缺失!${NC}"
+    echo "缺少以下库文件:"
+    for lib in "${MISSING_LIBS[@]}"; do
+        echo "  - $lib"
+    done
+    echo ""
+    echo -e "${YELLOW}可能的原因:${NC}"
+    echo "  1. Git克隆不完整 - 尝试重新克隆或运行: git pull"
+    echo "  2. 文件被删除 - 运行: git reset --hard origin/master"
+    echo "  3. 需要从本地Qt安装复制 - 设置QT_SOURCE_PATH并运行 ./copy_qt_libs.sh"
+    echo ""
+    echo -e "${BLUE}解决方案:${NC}"
+    echo "  查看详细说明: docs/Qt库问题解决方案.md"
+    echo ""
+    read -p "是否继续? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
     fi
 else
-    QT_LIBS_COUNT=$(ls -1 "$QT_LIB_DIR"/libQt5*.so.5.12.9 2>/dev/null | wc -l)
-    echo -e "${GREEN}✓ Qt库已就绪 (找到 $QT_LIBS_COUNT 个库文件)${NC}"
+    # 检查文件大小，确保不是空文件
+    TOTAL_SIZE=$(du -sh "$QT_LIB_DIR" 2>/dev/null | awk '{print $1}')
+    QT_LIBS_COUNT=${#REQUIRED_QT_LIBS[@]}
+    echo -e "${GREEN}✓ Qt库已就绪${NC}"
+    echo "  - 库文件数量: $QT_LIBS_COUNT"
+    echo "  - Qt库大小: $TOTAL_SIZE"
 fi
 echo ""
 
