@@ -1,1 +1,141 @@
-# 已禁用所有忽略规则 - 所有文件都将被上传
+# Build directories
+build/
+build-*/
+cmake-build-*/
+out/
+bin/
+lib/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!cmake/
+!cmake/*.cmake
+!CMakeLists.txt
+
+# Compiled Object files
+*.o
+*.obj
+*.ko
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+*.la
+*.lo
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Qt-specific
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qm
+.qmake.stash
+*.pro.user
+*.pro.user.*
+.qtc_clangd/
+.qt/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Dependency directories
+third_party/downloads/
+third_party/build/
+third_party/qt5/build/
+
+# Toolchain and SDKs (usually too large)
+toolchain/
+sdk/
+sysroot/
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~.nib
+
+# Core dumps
+core
+core.*
+
+# GDB history
+.gdb_history
+
+# Tags
+tags
+TAGS
+.tags
+.tags_sorted_by_file
+
+# Cscope
+cscope.out
+cscope.in.out
+cscope.po.out
+cscope.files
+
+# Generated documentation
+docs/html/
+docs/latex/
+docs/doxygen/
+
+# Package files
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar
+
+# Downloaded dependencies
+downloads/
+
