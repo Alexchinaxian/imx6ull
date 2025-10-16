@@ -14,8 +14,6 @@ Makefile
 
 # 编译产物
 *.o
-*.so
-*.so.*
 *.a
 *.la
 *.lo
@@ -24,6 +22,12 @@ Makefile
 *.exe
 *.out
 *.app
+
+# 忽略.so文件，但保留third_party目录中的Qt库
+*.so
+*.so.*
+!third_party/**/*.so
+!third_party/**/*.so.*
 
 # Qt相关
 moc_*.cpp
