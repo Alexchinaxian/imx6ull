@@ -10,10 +10,34 @@
 
 ## 🚀 快速开始
 
+### 在新机器上一键部署（首次使用）
+
 ```bash
-# 一键编译、部署、运行
-cd /home/alex/imx6ull && ./rebuild.sh && ./download.sh
+# 克隆项目
+git clone <your-repo-url> imx6ull
+cd imx6ull
+
+# 一键部署（自动安装工具链、配置环境、编译项目）
+chmod +x quick_setup.sh
+./quick_setup.sh
 ```
+
+> **注意**: 项目已包含Qt5库，无需额外安装Qt！只需交叉编译工具链。
+
+### 日常开发（已配置环境）
+
+```bash
+# 快速重新编译
+./rebuild.sh
+
+# 部署到设备
+./download.sh
+
+# 验证配置
+./verify_qt_libs.sh
+```
+
+> 📖 详细部署说明请查看: [快速部署指南](docs/快速部署指南.md)
 
 ---
 
